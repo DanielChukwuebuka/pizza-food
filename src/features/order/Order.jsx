@@ -12,14 +12,15 @@ import UpdateOrder from "./UpdateOrder";
 
 function Order() {
   const order = useLoaderData();
+  const fetcher = useFetcher();
 
-  const fetcher=useFetcher()
-  useEffect(function(){
-    if(!fetcher.data && fetcher.state==="idle")
-    fetcher.load("/menu")
-  },[fetcher])
+  useEffect(() => {
+    if (!fetcher.data && fetcher.state === "idle") {
+      fetcher.load("/menu");
+    }
+  }, [fetcher]);
+
   const {
-    //Everyone can search for all orders , so for privacy reasons we are gonna excludes names or adress, these are only for the restaurant staff
     id,
     status,
     priority,
@@ -52,16 +53,23 @@ function Order() {
         <p className="font-medium">
           {deliveryIn >= 0
             ? `Only ${calcMinutesLeft(estimatedDelivery)} minutes left 😃`
-            : 'Order should have arrived'}
+            : "Order should have arrived"}
         </p>
         <p className="text-xs text-stone-500">
           (Estimated delivery: {formatDate(estimatedDelivery)})
         </p>
       </div>
 
-      <ul className="dive-stone-200 divide-y border-b border-t">
+      <ul className="divide-stone-200 divide-y border-b border-t">
         {cart.map((item) => (
-          <OrderItem item={item} key={item.pizzaId} isLoadingIngredients={fetcher.state==="loading"} ingredients={fetcher.data?.find(el=>el.id===item.pizzaId).ingredients ??[]} />
+          <OrderItem
+            item={item}
+            key={item.pizzaId}
+            isLoadingIngredients={fetcher.state === "loading"}
+            ingredients={
+              fetcher.data?.find((el) => el.id === item.pizzaId)?.ingredients ?? []
+            }
+          />
         ))}
       </ul>
 
@@ -78,6 +86,7 @@ function Order() {
           To pay on delivery: {formatCurrency(orderPrice + priorityPrice)}
         </p>
       </div>
+
       {!priority && <UpdateOrder order={order} />}
     </div>
   );
