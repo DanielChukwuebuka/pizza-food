@@ -11,11 +11,11 @@ import CreateOrder, { action as createOrderAction } from './features/order/Creat
 import Order, { loader as orderLoader } from './features/order/Order';
 import { action as updateOrderAction } from './features/order/UpdateOrder';
 
-import AppLayout from './Ui/AppLayout';
+import AppLayOut from './Ui/AppLayOut';
 
 const router = createBrowserRouter([
   {
-    element: <AppLayout />,
+    element: <AppLayOut />,
     errorElement: <Error />,
 
     children: [
